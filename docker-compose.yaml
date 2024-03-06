@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ../frontend #変更(from ./frontend)
+      dockerfile: Dockerfile
+    volumes:
+      - ../frontend/:/app:cached
+      - ../frontend/node_modules:/app/node_modules
+    tty: true
+    ports:
+      - "5173:5173"
+    command: npm run dev #変更
+  mock-api:
+    image: stoplight/prism:4
+    ports:
+      - "4010:4010"
+    command: mock -h 0.0.0.0 /tmp/MathMath.yaml
+    volumes:
+      - ../frontend/reference:/tmp
+volumes:
+  node_modules:
